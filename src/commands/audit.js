@@ -3,7 +3,7 @@ const fetch = require('node-fetch')
 const {validateExerciseDirectoryName} = require('../managers/config/exercise.js')
 const { flags } = require('@oclif/command')
 const Console = require('../utils/console')
-const { isUrl, findInFile, checkForEmptySpaces, showErrors, showWarnings } = require('../utils/audit')
+const { isUrl, findInFile, checkLearnpackClean, checkForEmptySpaces, showErrors, showWarnings } = require('../utils/audit')
 const SessionCommand = require('../utils/SessionCommand');
 const fm = require("front-matter")
 const path = require('path')
@@ -15,15 +15,12 @@ class AuditCommand extends SessionCommand {
     }
     async run() {
         const { flags } = this.parse(AuditCommand)
-
+        
         Console.log("Running command audit...")
-
-        // Build exercises if they are not built yet.
-        if (!this.configManager.get().exercises) this.configManager.buildIndex()
 
         // Get configuration object.
         const config = this.configManager.get();
-
+        
         let errors = []
         let warnings = []
         let counter = {
@@ -38,7 +35,13 @@ class AuditCommand extends SessionCommand {
             exercises: 0,
             readmeFiles: 0
         }
+        
+        // Checks if learnpack clean has been run
+        checkLearnpackClean(config, errors)
 
+        // Build exercises if they are not built yet.
+        if (!this.configManager.get().exercises) this.configManager.buildIndex()
+        
         // Check if the exercises folder has some files within any ./exercise
         const exercisesPath = config.config.exercisesPath
         fs.readdir(exercisesPath, (err, files) => {

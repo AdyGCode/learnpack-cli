@@ -1,6 +1,6 @@
 const Console = require('./console')
 const fetch = require('node-fetch')
-
+const fs = require('fs')
 
 module.exports = {
     // This function checks if a url is valid.
@@ -28,6 +28,11 @@ module.exports = {
             }
         }
         return isEmpty;
+    },
+    checkLearnpackClean: (configObj, errors) => {
+        if(fs.existsSync(configObj.config.outputPath) || fs.existsSync(configObj.config.dirPath + "/_app") || fs.existsSync(configObj.config.dirPath + "/reports") || fs.existsSync(configObj.config.dirPath + "/resets")  || fs.existsSync(configObj.config.dirPath + "/app.tar.gz")  || fs.existsSync(configObj.config.dirPath + "/config.json")  || fs.existsSync(configObj.config.dirPath + "/vscode_queue.json")) {
+            errors.push({ exercise: null, msg: `You have to run learnpack clean command` })
+        }
     },
     findInFile: (types, content) => {
         const regex = {
