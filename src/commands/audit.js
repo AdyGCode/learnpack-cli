@@ -120,7 +120,7 @@ class AuditCommand extends SessionCommand {
                         counter.links.total++
                         try {
                             let res = await fetch(obj[link].mdUrl, { method: "HEAD" });
-                            if (res.status > 399 && res.status < 500) {
+                            if (res.status > 399 && res.status < 200) {
                                 counter.links.error++;
                                 errors.push({ exercise: exercise.title, msg: `This link is broken: ${obj[link].mdUrl}` })
                             }
