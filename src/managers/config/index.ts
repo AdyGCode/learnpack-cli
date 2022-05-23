@@ -160,7 +160,7 @@ configObj.config.editor.version = version;
       "https://raw.githubusercontent.com/learnpack/coding-ide/learnpack/package.json"
     );
     const packageJSON = await resp.json();
-    configObj.config.editor.version = packageJSON.version || "1.0.72";
+    configObj.config.editor.version = packageJSON.version || "1.0.73";
   }
 
   if (configObj.config) {
